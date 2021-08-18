@@ -1,0 +1,130 @@
+<html>
+
+<head>
+  <title></title>
+  <meta charset='UTF-8' />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      list-style: none;
+    }
+
+    .clearfix {
+      clear: both;
+    }
+
+    #box {
+      width: 460px;
+      height: 200px;
+      background-color: #000;
+      margin: 100px auto;
+      border: 1px solid #000;
+      text-align: center;
+    }
+
+    #box ul {
+      width: 100%;
+      height: 50px;
+      text-align: center;
+    }
+
+    ul li {
+      width: 60px;
+      float: left;
+      color: #eee;
+      background-color: #0094ff;
+      border: 1px solid #000;
+      font-size: 25px;
+      line-height: 50px;
+      padding: 5px 15px;
+      cursor: pointer;
+    }
+
+    #box ul li:hover {
+      color: #000;
+      background-color: #fff;
+    }
+
+    #box.active {
+      color: #000;
+      background-color: #fff;
+    }
+
+
+    li.activeli {
+      color: #000;
+      background-color: #fff;
+    }
+
+    #box span {
+      display: none;
+      width: 460px;
+      font-size: 50px;
+      line-height: 150px;
+    }
+
+    #box .show {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="box" class="active">
+    <ul>
+      <li class="activeli">Java</li>
+      <li>前端</li>
+      <li>鸿蒙</li>
+      <li>C#</li>
+      <li>Go</li>
+    </ul>
+    <span class="show">Java</span>
+    <span>前端</span>
+    <span>鸿蒙</span>
+    <span>C#</span>
+    <span>Go</span>
+  </div>
+</body>
+<script>
+  //目标1：点击 切换 选项卡
+  //思路：
+  //     a. 为每个 li标签 添加 onclick 事件
+  //     b. 事件中，遍历 所有 li标签，将被点击 的 class改成 activeli，其他li标签 class改成''
+
+  //目标2：随选项卡 切换 内容span
+  //     a.在 li标签的 onlick 中，为 相同下标的 span 的class设置为show，其他span标签class改成''
+
+  let liList = document.querySelectorAll('#box>ul>li');
+  console.log(liList);
+  let spanList = document.querySelectorAll('#box>span');
+  console.log(spanList);
+
+
+  // 遍历 li标签对象
+  for (let i = 0; i < liList.length; i++) {
+
+    // 为 li标签对象 添加 点击事件 onclick
+    liList[i].onclick = function () {
+      //排他思想：
+      for (let j = 0; j < liList.length; j++) {
+        // 1.将 不是 被点击的 li标签 和 相同下标的 span 隐藏起来
+        //   【注意】this 就是 事件源，是被点击的 li标签对象 
+        if (liList[j] != this) {
+          liList[j].className = '';
+          spanList[j].className = '';
+        } else {
+          //2.将 被点击的 li 和 span 显示出来
+          liList[j].className = 'activeli';
+          spanList[j].className = 'show';
+        }
+      }
+
+    }
+  }
+</script>
+
+</html>

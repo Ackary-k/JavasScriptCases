@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Index</title>
+</head>
+
+<body>
+    <h1>欢迎您：尊贵的 <span id="spanName">XXX</span> 阁下~~~~</h1>
+</body>
+<script>
+    // 目标：获取url参数中的uname参数的值，并显示在页面
+    //1.获取 url参数部分 并 去掉 ?  ，再按照 = 拆分为 数组 -> ['uname','james']
+    var arrParams = location.search.substr(1).split('=');
+    console.log(arrParams);
+
+    //2.如果 数组长度 不够，则说明参数未传递 ，如 02index.html
+    if (arrParams.length <= 1) {
+        alert('对不起，【您尚未登录哦】~~请不要非法闯入本页面~~~~');
+        // 当前窗口跳转 到 登录页面
+        location.href = '01login.html';
+    }//3.如果 参数名 不为 uname
+    else if (arrParams[0] != 'uname') {
+        alert('对不起，【参数名错误】~~请不要非法闯入本页面~~~~');
+        // 当前窗口跳转 到 登录页面
+        location.href = '01login.html';
+    }//4.如果 参数值 为 空
+    else if (arrParams[1] == '') {
+        alert('对不起，【丢失参数值】~~请不要非法闯入本页面~~~~');
+        // 当前窗口跳转 到 登录页面
+        location.href = '01login.html';
+    }//5.正确，显示用户名
+    else {
+        // 将 取出的 用户名 显示到 span 标签中
+        document.querySelector('#spanName').innerHTML = arrParams[1];
+    }
+
+</script>
+
+</html>

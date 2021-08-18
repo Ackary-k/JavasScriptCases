@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+        body {
+            background-color: #eee;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .inp {
+            display: none;
+        }
+
+        label {
+            display: block;
+            width: 500px;
+            height: 50px;
+            margin: 0 auto;
+            line-height: 50px;
+            background-color: #777;
+            color: #fff;
+            border-radius: 5px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .code {
+            position: relative;
+        }
+
+        .code>div {
+            width: 1000px;
+            margin: 0 auto;
+            background-color: #bbb;
+            border-bottom: 1px solid black;
+        }
+
+        .code>h4 {
+            margin-bottom: 10px;
+            text-align: center;
+            background-color: #888;
+            color: #fff;
+        }
+
+        #num {
+            margin: 0 auto;
+            width: 500px;
+            text-align: center;
+            height: 50px;
+            line-height: 50px;
+            font-size: 40px;
+            font-weight: 700;
+            border-radius: 5px;
+        }
+
+        #Copyright {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- v1.2 实现对多个script标签的检测 -->
+    <label for="fileInput">
+        【点击上传】今天的js代码吧（可以一次上传多个文件哦）
+        <input type="file" class="inp" name="" id="fileInput" multiple />
+    </label>
+    <div id="num"></div>
+    <div id="Copyright">Copyright © 卤肉饭/TCZ~~</div>
+
+    <script src='./js/count.js'></script>
+</body>
+
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        ul li {
+            display: inline;
+        }
+
+        img {
+            width: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="./images/left.jpg">
+    <img src="./images/left.jpg">
+    <img src="./images/left.jpg">
+    <img src="./images/left.jpg">
+    <img src="./images/left.jpg">
+</body>
+<!-- 导入 jq 文件 -->
+<script src="./js/jquery-3.5.1.min.js"></script>
+<!-- 业务 js 代码 -->
+<script>
+    //1.入口函数
+    $(function () {
+        // 【设置 图片 地址 语法】- $(img).attr('src',url);
+
+        //2.获取页面上所有 img 标签
+        let $imgList = $('img');
+
+        //3.为每个 img 添加点击事件
+        $imgList.click(function () {
+            //4.点击时：
+            //  a.获取被点击 图片，修改 图片地址
+            this.src = "./images/jtln.png"
+            //  b.获取被点击 图片 前面所有 图片 并 修改 图片地址
+            $(this).prevAll('img').attr('src', './images/right.jpg');
+            //  c.获取被点击 图片 后面所有 图片 并 修改 图片地址
+            $(this).nextAll('img').attr('src', './images/left.jpg')
+        });
+    })
+</script>
+
+</html>

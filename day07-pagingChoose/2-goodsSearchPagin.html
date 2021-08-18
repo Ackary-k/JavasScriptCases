@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>商品查询案例-页码条</title>
+    <style>
+        table {
+            width: 400px;
+            border: 1px solid #000;
+            border-collapse: collapse;
+            margin: 0 auto;
+        }
+
+        td,
+        th {
+            border: 1px solid #000;
+            text-align: center;
+        }
+
+        input {
+            width: 50px;
+        }
+
+        .search {
+            width: 600px;
+            margin: 20px auto;
+        }
+    </style>
+    <!-- 页码条 样式 begin -->
+    <style>
+        #pageBar {
+            font-size: 14px;
+            width: 600px;
+            margin: 30px auto;
+        }
+
+        #pageBar a,
+        span {
+            border: 1px solid #000;
+            padding: 3px 10px;
+            margin: 3px 2px;
+            color: #000;
+            background-color: whitesmoke;
+            text-decoration: none;
+        }
+
+        #pageBar a:hover {
+            color: #fff;
+            background-color: #0094ff;
+        }
+
+        #pageBar select {
+            margin: 5px;
+        }
+
+        #pageBar a.active {
+            color: #fff;
+            background-color: #0094ff;
+        }
+    </style>
+    <!-- 页码条 样式 end -->
+    <script src="./JZPagination.js"></script>
+</head>
+
+<body>
+    <div class="search">
+        按照价格查询: <input type="text" class="start"> - <input type="text" class="end">
+        <button class="search-price">搜索</button>
+        按照商品名称查询: <input type="text" class="product">
+        <button class="search-pro">查询</button>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>产品名称</th>
+                <th>价格</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- 1.页码条 容器标签 -->
+    <div id='pageBar'></div>
+
+    <script>
+        // 利用新增数组方法操作数据
+        var data = [{
+            id: 1,
+            pname: '小米',
+            price: 3999
+        }, {
+            id: 2,
+            pname: 'oppo',
+            price: 999
+        }, {
+            id: 3,
+            pname: '荣耀',
+            price: 1299
+        }, {
+            id: 4,
+            pname: '华为',
+            price: 1999
+        }, {
+            id: 5,
+            pname: '华为',
+            price: 1999
+        }, {
+            id: 6,
+            pname: '华为',
+            price: 1999
+        }, {
+            id: 7,
+            pname: '华为',
+            price: 1999
+        }, {
+            id: 8,
+            pname: '华为',
+            price: 1999
+        }, {
+            id: 9,
+            pname: '华为',
+            price: 1999
+        }, {
+            id: 10,
+            pname: '华为',
+            price: 1999
+        }, {
+            id: 11,
+            pname: '华为',
+            price: 1999
+        }, {
+            id: 12,
+            pname: '华为',
+            price: 1999
+        }, {
+            id: 13,
+            pname: '华为',
+            price: 1999
+        }, {
+            id: 14,
+            pname: '华为',
+            price: 1999
+        },];
+
+
+        // 1. 获取相应的元素 -----------------------------
+        var tbody = document.querySelector('tbody');
+        var search_price = document.querySelector('.search-price');
+        // 1.1 两个价格区间文本框
+        var txtStart = document.querySelector('.start');
+        var txtSend = document.querySelector('.end');
+        // 1.2 产品名字文本框
+        var txtProduct = document.querySelector('.product');
+        var search_pro = document.querySelector('.search-pro');
+
+        // 调用 翻页方法
+        toPage(1);
+
+        // 3. 翻页方法 ：pageIndex - 要前往的页码 
+        function toPage(pgIndex) {
+            //1.生成页码条 ------------------------------------------------
+            var pageSize = 4;//页容量
+            makePageBar({
+                pageFunc: toPage, // 设置页码点击时 调用的函数
+                pgSize: pageSize, // 页容量
+                gpSize: 3, // 页码组容量
+                pageContainer: 'pageBar', // 页码容器div的id
+                pgIndex: pgIndex, // 要前往的新页码
+                roCount: data.length, // 数据总个数
+                simpleModel: false
+            });
+            //2.加载数据：根据页码 和 页容量 生成 只包含当前页数据的 新数组 --------
+            //a.计算 开始 下标 和 结束下标
+            var beginIndex = (pgIndex - 1) * pageSize; // 第1页： (1-1) * 4 = 0
+            var endIndex = (pgIndex * pageSize) - 1;   // 第1页： (1*4) - 1 = 3
+            //b.如果 结束下标 小于 数组长度，则 正常
+            //              >=  数组长度，则 返回数组最后一个元素的下标
+            endIndex = endIndex < data.length ? endIndex : data.length - 1;
+            // 后台输出 跟踪：
+            console.log('页容量:', pageSize, '页码:', pgIndex, '开始下标:', beginIndex, '结束下标:', endIndex);
+            //b.根据起始下标 获取 新数组
+            var pagedData = []; // 分页数组
+            for (var i = beginIndex; i <= endIndex; i++) {
+                // 将 元数据 数组 中 对应下标的 元素 加入 分页数组
+                pagedData.push(data[i]);
+            }
+            // 根据 分页数组 数据 生成表格行
+            makeTable(pagedData);
+        }
+
+        // 2. 根据数组 生成表格行 --------------------------
+        function makeTable(mydata) {
+            // a.先清空原来tbody 里面的数据
+            tbody.innerHTML = '';
+            // b.遍历数组，生成表格行
+            mydata.forEach(function (value) {
+                var tr = document.createElement('tr');
+                tr.innerHTML = `<td>${value.id}</td><td>${value.pname}</td><td>${value.price}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // 3. 根据价格查询商品 -------------------------------
+        search_price.addEventListener('click', function () {
+            // a.从 原始 数组 中 筛选 符合 价格区间的 元素，并 形成 新的数组 返回
+            var newDate = data.filter(function (value) {
+                return value.price >= txtStart.value && value.price <= txtSend.value;
+            });
+            // b.把筛选完之后的对象渲染到页面中
+            makeTable(newDate);
+        });
+
+        // 4. 根据商品名称查找商品 -------------------------------
+        // 如果查询数组中唯一的元素, 用some方法更合适,因为它找到这个元素,就不在进行循环,效率更高]
+        search_pro.addEventListener('click', function () {
+            //a.准备 空数组
+            var arr = [];
+            //b.查找 数组中 名字相同的 元素，装入新数组，并停止循环
+            data.some(function (v) {
+                if (v.pname == txtProduct.value) {
+                    arr.push(v);
+                    return true;
+                };
+            });
+            //c.根据 数组 重新生成表格
+            makeTable(arr);
+        })
+    </script>
+</body>
+
+</html>

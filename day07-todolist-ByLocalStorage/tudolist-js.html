@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>ToDoList—最简单的待办事项列表</title>
+    <link rel="stylesheet" href="css/index.css">
+    <script src="js/localdata.js"></script>
+    <script>
+        // 创建 封装好的本地数据操作 对象，设置 localStorage 的 key，和 主键属性名（自动为数据对象添加此属性，并设置 id值）
+        let localdata = new LocalData('websz', 'id');
+
+        let txtTitle = null;
+        let olNode = null;
+        let spanNode = null;
+
+        window.onload = function () {
+            txtTitle = document.querySelector('#title');
+            olNode = document.querySelector('#todolist');
+            spanNode = document.querySelector('#todocount');
+
+            //1.根据数据生成页面
+            initPage();
+            //2.文本框 回车处理
+            txtTitle.onkeypress = add;
+            //3.删除按钮 点击事件添加
+            olNode.onclick = remove;
+        };
+
+        //1.根据数据生成页面内容-------------------------------------------------------------
+        function initPage() {
+            //1.加载本地数据数组
+            let arr = localdata.readData();
+
+            //2.更新 数量
+            spanNode.innerHTML = arr.length;
+
+            //3.遍历数组，生成 li 标签
+            let strHtml = '';
+            for (let i = 0; i < arr.length; i++) {
+                strHtml +=
+                    `<li><p>${arr[i].content}</p> <a href="javascript:;" id="${arr[i].id}"></a></li>`;
+            }
+            //4.将 li标签 设置给 ol
+            olNode.innerHTML += strHtml;
+        }
+
+        //2.新增事件处理函数 ----------------------------------------------------------------------
+        function add(event) {
+            //1.判断回车
+            if (event.keyCode == 13) {
+                //2.获取文本框内容
+                let strTitle = this.value.trim();
+                if (strTitle.length == 0) {
+                    alert('内容不能空哦~~');
+                    return;
+                }
+                //3.创建内容对象，并添加到本地 localStorage
+                let newId = localdata.addData({
+                    content: strTitle
+                });
+                //4.添加 li
+                olNode.innerHTML += `<li><p>${strTitle}</p> <a href="javascript:;" id="${newId}"></a></li>`;
+                //5.更新 数量
+                spanNode.innerHTML = (parseInt(spanNode.innerHTML) + 1);
+            }
+        }
+
+        //3.删除事件处理函数 ----------------------------------------------------------------------
+        function remove(event) {
+            //1.判断 真实事件源 是否为 删除按钮 a标签
+            let aObj = event.target;
+
+            if (aObj.nodeName == 'A' && aObj.id) {
+                //2.获取 a 标签里的 id 值
+                let delId = aObj.id;
+                //3.根据 id 删除本地 数据
+                let isOk = localdata.removeDataById(delId);
+                if (isOk) {
+                    //4.删除 li 标签
+                    aObj.parentNode.parentNode.removeChild(aObj.parentNode)
+                    //5.更新 数量
+                    spanNode.innerHTML = (parseInt(spanNode.innerHTML) - 1);
+                }
+                //6.阻断事件冒泡
+                event.stopPropagation();
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <header>
+        <section>
+            <label for="title">ToDoList</label>
+            <input type="text" id="title" name="title" placeholder="添加ToDo" required="required" autocomplete="off" />
+        </section>
+    </header>
+    <section>
+        <h2>今日事项 <span id="todocount">0</span></h2>
+        <ol id="todolist" class="demo-box">
+
+        </ol>
+    </section>
+    <footer>
+        Copyright &copy; 黑马们~~
+    </footer>
+
+
+</body>
+
+</html>

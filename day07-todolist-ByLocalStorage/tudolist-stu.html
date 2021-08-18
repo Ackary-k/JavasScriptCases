@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>ToDoList—最简单的待办事项列表</title>
+    <link rel="stylesheet" href="css/index.css">
+    <script src="js/localdata.js"></script>
+
+</head>
+
+<body>
+    <header>
+        <section>
+            <label for="title">ToDoList</label>
+            <input type="text" id="title" name="title" placeholder="添加ToDo" required="required" autocomplete="off" />
+        </section>
+    </header>
+    <section>
+        <h2>今日事项 <span id="todocount">0</span></h2>
+        <ol id="todolist" class="demo-box">
+        </ol>
+    </section>
+    <footer>
+        Copyright &copy; 黑马们~~
+    </footer>
+
+
+</body>
+<script>
+    // 创建 封装好的本地数据操作 对象，设置 localStorage 的 key，和 主键属性名（自动为数据对象添加此属性，并设置 id值）
+    let localdata = new LocalData('websz', 'id');
+
+    let txtTitle = document.querySelector('#title');
+    let olNode = document.querySelector('#todolist');
+    let spanNode = document.querySelector('#todocount');
+
+    //1.根据数据生成页面内容-------------------------------------------------------------
+    window.onload = function () {
+        //a.读取 本地 数组
+        let arr = localdata.readData();
+        //b.遍历数组，调用 add 方法，创建 li
+        for (let i = 0; i < arr.length; i++) {
+            add(arr[i]);
+        }
+    }
+
+    //2.新增事件处理函数 ----------------------------------------------------------------------
+    txtTitle.onkeyup = function (e) {
+        // 如果 按的是回车，则 创建 li，并更新 数目
+        if (e.keyCode == 13) {
+            //1.创建 数据对象 {content:'asdfasdf'}
+            let obj = {
+                content: this.value
+            };
+            //2.将 数据对象 添加到 本地保存
+            //     同时 获取 由  localdata.addData 方法 返回的 id 值
+            let ids = localdata.addData({
+                content: this.value
+            });
+            //3.为 数据对象 添加 id属性，并将 id值设置给 它
+            obj.id = ids; // {id:1,content:'asdfasdf'}
+
+            //4.调用add方法，创建 li标签
+            add(obj);
+        }
+    }
+
+    function add(dataObj) { // dataObj ->{id:1,content:'asdfasdf'}
+        //2.创建 li标签对象
+        let li = document.createElement('li');
+        //3.设置 文本内容 给 li标签
+        li.innerHTML = '<p>' + dataObj.content +
+            '</p><a onclick="remove(this);" href="javascript:void(0)" data-id="' + dataObj.id + '"></a>';
+        //4.加入 ol
+        olNode.appendChild(li);
+
+        //5.更新数目
+        spanNode.innerText = parseInt(spanNode.innerText) + 1;
+    }
+
+    //3.删除事件处理函数 ----------------------------------------------------------------------
+    function remove(aObj) {
+        //3.1 获取 a标签上的 id，到 本地根据id删除 数据对象
+        // aObj.getAttribute('data-id')
+        localdata.removeDataById(aObj.dataset.id);
+        //3.2 删除 a标签所在的 li
+        aObj.parentNode.parentNode.removeChild(aObj.parentNode);
+        //3.3 更新数量
+        spanNode.innerText = parseInt(spanNode.innerText) - 1;
+    }
+</script>
+
+</html>

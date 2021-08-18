@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <ul>
+        <li>机器人技术栈</li>
+        <li>C++技术栈</li>
+        <li>C和汇编技术栈</li>
+        <li id="webfrontLi">大前端技术栈</li>
+        <!--我是注释呀-->
+        <li>Java技术栈</li>
+        <li>.Net技术栈</li>
+        <li>Python技术栈</li>
+    </ul>
+</body>
+<script>
+    // Boolean() 转false 0 -0 NaN '' undefined null document.all
+    //           转true 其他
+
+
+    let webfrontObj = document.querySelector('#webfrontLi');
+
+    // 1.思考：获取前面的所有兄弟元素节点 --------------------------------------
+    let arrPre = getPreviousElement(webfrontObj);
+    // console.log(arrPre);
+    for (let i = 0; i < arrPre.length; i++) {
+        console.log(arrPre[i].innerHTML);
+    }
+
+    //  getPreviousElement(dom) - 获取 dom 对象 前面的所有兄弟节点 -------------------
+    //  return 数组;
+    function getPreviousElement(dom) {
+        let arr = [];
+        while (dom) {
+            // 获取 上一个兄弟元素节点，并存入 变量
+            dom = dom.previousElementSibling;
+            // 如果 元素节点 上一个 兄弟元素节点 存在，则 添加到数组中
+            if (dom != null) {
+                arr.push(dom);
+            }
+        }
+        arr.reverse();
+        // 返回 包含 所有 前面兄弟节点的数组
+        return arr;
+    }
+
+
+    //  2.思考：获取后面的所有兄弟元素节点 --------------------------------------
+    let arrNext = getNextElement(webfrontObj);
+    for (let i = 0; i < arrNext.length; i++) {
+        console.log(arrNext[i].innerHTML);
+    }
+
+    //  getNextElement(dom) - 获取 dom 对象 后面的所有兄弟节点 -------------------
+    //  return 数组;
+    function getNextElement(dom) {
+        let arr = [];
+        while (dom) {
+            // 获取 上一个兄弟元素节点，并存入 变量
+            dom = dom.nextElementSibling;
+            // 如果 元素节点 上一个 兄弟元素节点 存在，则 添加到数组中
+            if (dom != null) {
+                arr.push(dom);
+            }
+        }
+        // 返回 包含 所有 前面兄弟节点的数组
+        return arr;
+    }
+
+
+    // 思考：获取所有兄弟元素节点 --------------------------------------
+    console.log('思考：获取所有兄弟元素节点----------------------');
+
+    let brothers = getAllBrothers(webfrontObj);
+    for (let i = 0; i < brothers.length; i++) {
+        console.log(brothers[i].innerHTML);
+    }
+
+
+    function getAllBrothers(dom) {
+        let arrBrothers = [];
+        // 获取 父元素节点
+        let fatherNode = dom.parentNode;
+        // 遍历 所有父元素节点的 子节点
+        for (let i = 0; i < fatherNode.children.length; i++) {
+            if (fatherNode.children[i] != dom) {
+                arrBrothers.push(fatherNode.children[i]);
+            }
+        }
+        return arrBrothers;
+    }
+
+</script>
+
+</html>

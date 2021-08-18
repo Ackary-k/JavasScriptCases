@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>登录校验</title>
+    <style>
+        table {
+            border: 1px solid #0094ff;
+            margin: 50px auto;
+            text-align: center;
+            border-collapse: collapse;
+        }
+
+        table td {
+            border: 1px solid #0094ff;
+            padding: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <td colspan="2">欢迎登录~~~</td>
+        </tr>
+        <tr>
+            <td>用户名：</td>
+            <td><input type="text" id="txtUName" value="讨厌"></td>
+        </tr>
+        <tr>
+            <td>密 码：</td>
+            <td><input type="password" id="txtPwd"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="button" value="登录">
+                <input type="button" value="注册">
+            </td>
+        </tr>
+    </table>
+</body>
+<script>
+    // 目标：登录时 先 做 登录校验：用户名 和 密码 不能为空格~~！
+    // 思路：
+    //     事件源： 登录按钮
+    //     事件类型：onclick
+    //     事件处理函数：获取 两个文本框的值，判断是否为空
+
+    //1.获取 两个 文本框 , 存入 全局变量中
+    let txtName = document.querySelector('#txtUName');
+    let txtPwd = document.querySelector('#txtPwd');
+
+    //0.根据 value 属性 查询 按钮dom对象
+    document.querySelector('[value=登录]').onclick = function () {
+        //2.去掉左右两边的空格
+        // trim 用来 去掉 字符串 两边的 空格
+        //      a.如果 整个字符串 都是空格，则 全部 去掉
+        //      b.如果 字符串中间 有空格，不会去掉
+        let strName = txtName.value.trim(); //.replace(/ /g,'');
+        let strPwd = txtPwd.value.trim();
+
+        //3.判断值 是否为空
+        if (strName.length == 0) {
+            alert('用户名不能为空哦~~亲~~');
+            // 3.1 让 文本框 获取 焦点
+            txtName.focus();
+        } else if (strPwd.length == 0) {
+            alert('用户密码不能为空格哦~~~死鬼~~~');
+            // 3.3 让 密码框 获取 焦点
+            txtPwd.focus();
+        } else if (strName != 'james' || strPwd != '123123') {
+            alert('用户名 或 密码 错误哦~~~');
+        } else {
+            alert('恭喜你，登录校验通过啦~~~');
+            // 跳转页面
+            location.href = 'http://www.itheima.com'
+        }
+
+    }
+</script>
+
+</html>

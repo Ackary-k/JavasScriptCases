@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>登录</title>
+</head>
+
+<body>
+    <input type="text" id="txtName" />
+    <input type="password" id="txtPwd" />
+    <input type="button" value="登录咯" id="btnOk">
+</body>
+<script>
+    //目标：获取 登录信息
+
+    document.querySelector('#btnOk').onclick = function () {
+        //     1.获取 文本框对象，并且获取其中的内容
+        let strName = document.querySelector('#txtName').value.trim();
+        let strPwd = document.querySelector('#txtPwd').value.trim();
+
+        if (strName == 'james' && strPwd == '123123') {
+            alert('恭喜你~~登录成功~~~');
+
+            // 当前窗口 跳转到 index 页面，并传递用户名
+            location = `02index.html?uname=${strName}`;
+        } else {
+            alert('死鬼，账户和密码都忘了吗？请重新输入吧~~~');
+        }
+    }
+</script>
+
+</html>

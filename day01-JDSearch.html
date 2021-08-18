@@ -1,0 +1,50 @@
+l
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>搜索框案例</title>
+    <style>
+        input {
+            display: block;
+            border: 3px solid #000;
+            margin: 50px auto;
+            width: 500px;
+            line-height: 50px;
+            font-size: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="text" id="txtName" value="请输入男朋友的名字：" /> <!-- placeholder="请输入男朋友的名字：" -->
+</body>
+<script>
+    // 目标：大家都知道~~~
+    // 思路：
+    //      事件源 -  文本框
+    //      事件类型 - 获取焦点 和 失去焦点事件
+    //      事件处理函数 - 
+
+    let txtDom = document.querySelector('#txtName');
+
+    // 获取焦点事件
+    txtDom.onfocus = function () {
+        if (this.value == '请输入男朋友的名字：') {
+            this.value = '';
+        }
+    };
+
+    // 失去焦点事件
+    txtDom.onblur = function () {
+        // 如果 失去焦点时，文本框中的内容 为 空，则 设置 默认内容
+        if (this.value.trim().length == 0) {
+            this.value = '请输入男朋友的名字：';
+        }
+    };
+</script>
+
+</html>

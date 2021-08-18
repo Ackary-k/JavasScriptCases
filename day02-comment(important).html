@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .father {
+            width: 800px;
+            margin: 0 auto;
+        }
+
+        .content {
+            height: 120px;
+            padding: 10px;
+            border: 1px solid red;
+        }
+
+        .commens {
+            padding: 10px;
+            border: 1px solid green;
+        }
+
+        .commens div {
+            padding: 5px 8px;
+            border-bottom: 1px dashed #666;
+        }
+
+        .commens div span {
+            /* border: 1px solid #0094ff; */
+            cursor: pointer;
+            float: right;
+            font-weight: bolder;
+        }
+
+        .add {
+            width: 780px;
+            margin: 0 auto;
+            margin-top: 10px;
+            border: 1px solid blue;
+            padding: 10px;
+            padding-bottom: 60px;
+        }
+
+        textarea {
+            display: block;
+            width: 760px;
+            margin: 0 auto;
+            height: 120px;
+            resize: none;
+        }
+
+        input[type="button"] {
+            float: right;
+            padding: 10px 14px;
+            margin-top: 10px;
+            margin-right: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="father">
+        <div class="content">
+            今天去了一个很神奇的地方，看照片能猜出来是哪里吗？<br />
+            今天去了一个很神奇的地方，看照片能猜出来是哪里吗？
+        </div>
+        <div class="commens" id="commens">
+            <div>评论：</div>
+            <div>今天的3个肉包子 好好吃呀~~~~</div>
+        </div>
+    </div>
+    <div class="add">
+        <textarea name="" id="txtComment"></textarea>
+        <input type="button" value="发表" id="btnOk" />
+    </div>
+
+    <script>
+        //目标1：点击发表按钮，获取 文本框内容，创建一个新的 div，将内容设置给div。最后，将 div 追加到 评论区中。
+        //思路：
+        //    a.为 发表按钮 添加点击事件
+        //    b.获取文本域内容
+        //    c.创建一个新的div，并 把 评论内容 设置给 div
+        //    d.将 div 追加到 评论区
+
+        //0.查找 文本域对象
+        let txtComm = document.querySelector('#txtComment');
+        // 查找 评论区 div对象
+        let divComm = document.querySelector('#commens');
+
+        //1.发表按钮的 点击事件
+        document.querySelector('#btnOk').onclick = function () {
+            //a.获取 文本域 的评论内容
+            let strComm = txtComm.value;
+            //b.创建一个 新的 div
+            let divObj = document.createElement('div');
+            divObj.innerHTML = strComm;
+            //c.将 新div 追加到 评论区 div 中
+            divComm.appendChild(divObj);
+
+        }
+    </script>
+</body>
+
+</html>

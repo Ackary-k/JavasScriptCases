@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .main,
+        table {
+            width: 800px;
+            margin: 0 auto;
+            border: 1px solid #000;
+        }
+
+        table th {
+            background-color: #0094ff;
+            color: #fff;
+        }
+
+        .main {
+            height: 40px;
+            line-height: 40px;
+        }
+
+        table,
+        th,
+        td {
+            padding: 3px 5px;
+            border: 1px solid black;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        .optd {
+            width: 200px;
+        }
+
+        .addTable {
+            width: 780px;
+            padding: 10px;
+            border: 1px solid green;
+            /* 固定位置 */
+            position: fixed;
+            top: 200px;
+            left: 50%;
+            margin-left: -400px;
+            /* 标准流 */
+            /* margin: 0 auto; */
+            background-color: #fff;
+            display: none;
+        }
+
+        .addTable table {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .greenTr {
+            background-color: yellowgreen;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <input type="button" value="新增一行" id="addBtn" />
+    </div>
+
+    <!--用于新增表格获取数据的模块-->
+    <div class="addTable" id="addRow">
+        <table>
+            <tr>
+                <th>学号</th>
+                <th>姓名</th>
+                <th>性别</th>
+                <th>年龄</th>
+            </tr>
+            <tr>
+                <td><input type="text" id="txtId" /></td>
+                <td><input type="text" id="txtName" /></td>
+                <td>
+                    <select id="selGender">
+                        <option value='true'>男</option>
+                        <option value="false">女</option>
+                    </select>
+                </td>
+                <td><input type="text" id="txtAge" /></td>
+            </tr>
+        </table>
+
+        <div>
+            <input type="button" value="确定" id="sure" />
+            <input type="button" value="取消" id="cancle" />
+        </div>
+    </div>
+
+    <!-- 数据表格 -->
+    <table id="table">
+        <tbody id='tbody'>
+            <!--表头行 1行 -->
+            <!--数据行 n行 -->
+        </tbody>
+    </table>
+
+    <script>
+        //1.数据准备 ------------------------------------------------
+        let btnAdd = document.getElementById('addBtn'); // 显示新增的 按钮
+
+        let tableAdd = document.getElementById('addRow'); // 新增数据用的 表格
+        let tableData = document.getElementById('table'); // 显示数据表格
+        let tbodyNode = document.getElementById('tbody'); // 数据表格 身体
+
+        let btnSure = document.getElementById('sure'); // 新增确认按钮
+        let btnCancel = document.getElementById('cancle'); // 新增取消按钮
+
+        let txtID = document.getElementById('txtId');
+        let txtName = document.getElementById('txtName');
+        let selGender = document.getElementById('selGender');
+        let txtAge = document.getElementById('txtAge');
+
+        //2.表头数据
+        let thData = ['学号', '姓名', '性别', '年龄', '操作'];
+        //  数据行数据
+        let trData = [{
+                sID: 1,
+                sName: '妲己',
+                sGender: false,
+                sAge: 38
+            },
+            {
+                sID: 2,
+                sName: '大乔',
+                sGender: false,
+                sAge: 23
+            },
+            {
+                sID: 3,
+                sName: '曹操',
+                sGender: true,
+                sAge: 47
+            },
+            {
+                sID: 4,
+                sName: '吕布',
+                sGender: true,
+                sAge: 39
+            },
+        ];
+
+        // 目标1：根据 表头数据 生成 数据表格的 第一行（表头） -----------------
+        function makeHead(data, tbNode) {
+            //方式一：innerHTML
+            let strHtml = '<tr>';
+            //遍历数组，生成 单元格
+            for (let i = 0; i < data.length; i++) {
+                strHtml += '<th>' + data[i] + '</th>'
+            }
+            strHtml += '</tr>';
+            //将字符串 添加到 表格tbody中
+            tbNode.innerHTML = strHtml;
+
+            //方式二：document.createElement()   table.appendChild(trObj)
+        }
+
+        // 调用 函数 生成 数据表格的 第一行
+        makeHead(thData, tbodyNode);
+
+        // 目标2：根据 数据行数据 生成 表格 的 数据行 -------------------------
+        function makeDataTrs(dataArr, tbNode) {
+            //循环 数据行 数组，生成 表格数据行
+            for (let i = 0; i < dataArr.length; i++) {
+                let trObj = dataArr[i];
+                makeTr(trObj, tbNode);
+            }
+        }
+
+        // 调用 函数 生成 数据行
+        makeDataTrs(trData, tbodyNode);
+
+        // 生成 一个行  --------------------------------------------------
+        function makeTr(trObj, tbNode) {
+            let strTr = '';
+            strTr += '<tr>';
+            strTr += '<td>' + trObj.sID + '</td>';
+            strTr += '<td>' + trObj.sName + '</td>';
+            strTr += '<td>' + (trObj.sGender ? '男' : '女') + '</td>';
+            strTr += '<td>' + trObj.sAge + '</td>';
+            // '<td>      <a onclick=function(){  remove(this); }>删</a></td>';
+            strTr += '<td><a href="javascript:void(0)" onclick="remove(this)">删</a></td>';
+            strTr += '</tr>';
+            tbNode.innerHTML += strTr;
+        }
+
+        // 目标3：显示 新增表格 --------------------------------------------
+        btnAdd.onclick = function () {
+            tableAdd.style.display = 'block';
+        }
+
+        // 目标4：新增 确认 按钮 --------------------------------------------
+        btnSure.onclick = function () {
+            //a.获取 表单数据
+            let trObj = {
+                sID: txtID.value.trim(),
+                sName: txtName.value.trim(),
+                sGender: selGender.value.trim(),
+                sAge: txtAge.value.trim(),
+            }
+
+            makeTr(trObj, tbodyNode);
+
+            tableAdd.style.display = 'none';
+
+        }
+
+
+        // 目标5：删除 方法 --------------------------------------------
+        // aObj - 点击 超链接时 传入的 超链接对象
+        function remove(aObj){
+            let tr = aObj.parentNode.parentNode;
+            tr.parentNode.removeChild(tr);
+        }
+        
+
+        // window.remove();
+        // remove(); // 可以 省略 window.  -》  window.remove();
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>树形菜单-js</title>
+  <style>
+    ul {
+      border: 1px solid #000;
+    }
+  </style>
+</head>
+
+<body>
+  <div></div>
+  <script>
+    //1.无极菜单数组 -------------------------------------------------------
+    var menuList =
+      [
+        {
+          id: 1,
+          title: '班级学员管理',
+          sonList: [
+            {
+              id: 11,
+              title: '班级管理',
+              sonList: [
+                {
+                  id: 111,
+                  title: '学员信息管理',
+                  sonList: [
+                    {
+                      id: 1111,
+                      title: '个人考勤',
+                    },
+                    {
+                      id: 1112,
+                      title: '代码量考勤',
+                    }
+                  ]
+                }, {
+                  id: 112,
+                  title: '学员课表管理',
+                  sonList: null
+                }
+              ]
+            },
+            {
+              id: 12,
+              title: '班级学员就业管理',
+              sonList: null
+            }
+          ]
+        },
+        {
+          id: 2,
+          title: '教学业务管理',
+          sonList: [
+            { id: 21, title: '每日反馈' },
+            { id: 22, title: '每日测评' }
+          ]
+
+        },
+        { id: 3, title: '就业业务管理' },
+      ];
+
+    //2.业务代码--------------------------------------
+    // 2.1根据数组 创建 子菜单 ------------------------
+    function makeMenu(list, arrHtml) {
+      arrHtml.push('<ul>');
+      for (var i = 0; i < list.length; i++) {
+        var item = list[i];
+        if (item.sonList) {
+          arrHtml.push(`<li data-id="${item.id}">${item.title}`);
+          makeMenu(item.sonList, arrHtml);
+          arrHtml.push(`</li>`);
+        } else {
+          arrHtml.push(`<li data-id="${item.id}">${item.title}</li>`);
+        }
+      }
+      arrHtml.push('</ul>');
+      return arrHtml;
+    }
+
+    // 2.2调用----------------------------------------
+    //a.准备空数组，接收 生成的 html 标签
+    var arr = [];
+    //b.调用方法，将 菜单数组 和 标签数组 传入
+    arr = makeMenu(menuList, arr);
+    console.log(arr);
+    //c.将 标签数组 中的 元素 用 换行符 拼接成一个 Html字符串，并设置给 div
+    var strHtmlAll = arr.join('\n');
+    console.log(strHtmlAll);
+    document.querySelector('div').innerHTML = strHtmlAll;
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-size: 20px;
+        }
+
+        .box {
+            width: 600px;
+            height: 40px;
+            margin: 200px auto;
+            position: relative;
+        }
+
+        #txt {
+            width: 498px;
+            height: 38px;
+            border: 1px solid #ccc;
+            font-size: 20px;
+        }
+
+        #search {
+            width: 100px;
+            height: 40px;
+        }
+
+        #keywords {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            background-color: rgb(12, 255, 24);
+            list-style: none;
+            width: 500px;
+            ;
+        }
+
+        li {
+            line-height: 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <div class="top">
+            <input type="text" id="txt" /><input type="button" value="search" id="search" />
+        </div>
+        <ul id="keywords"></ul>
+    </div>
+    <script>
+        // 字符串的 indexOf 函数，根据 字符 查找 第一个匹配字符的 下标，如果找到了返回下标。如果没找到，返回 -1
+        // 'abc'.indexOf('c') -> 2
+        // 'abcgf'.indexOf('g') -> 3
+        // 'abcgfgccc'.indexOf('g') -> 3
+        // 'abc'.indexOf('d') -> -1
+        /*
+        1.分析需求(交互)：
+            (1)给输入框txt注册键盘松开事件 ： 根据搜索内容显示对应ul列表
+            (2)鼠标移入： 颜色变红
+            (3)鼠标移出： 颜色恢复原先颜色
+            (4)鼠标点击： a. 输入框文字变成当前点击的文字  b.清空列表
+        2.思路分析（事件三要素）
+            获取元素：事件源：文本框
+            注册事件：事件类型：onkeyup
+            事件处理：
+        */
+        let keywords = ["林利群", "林利群为什么很黑", "林利群的经纪人是周林林吗", "林利群是谁", "广东人", "广东人爱吃", "广东人爱吃福建人", "王宝强", "王宝强的经纪人",
+            "王宝强的老婆", "林丹出轨门", "林丹夺冠", "123", "1234", "12345", "林丹的生平", "JavaScript", "Java", "王思聪", "王健林", "社会王",
+            "隔壁老王"
+        ];
+
+        //0.获取 文本框 和 ul列表对象
+        let txtNode = document.querySelector('#txt');
+        let ulNode = document.querySelector('#keywords');
+
+        //1.设置 文本框的 键盘松开事件 -- 因为 松开按键时，内容 已经输入到文本框了 --------
+        txtNode.onkeyup = function () {
+            // 清空 ul 中所有 li 标签
+            ulNode.innerHTML = '';
+
+            //2.获取文本框的值
+            let key = txtNode.value.trim();
+            if (key.length == 0) {
+                return; // 停止函数运行
+            }
+
+            //3.遍历数组，查找 包含 关键字的 元素
+            for (let str of keywords) {
+                //4.判断 元素中是否包含 关键字，如果包含，则返回 下标，如果不包含，返回-1
+                if (str.indexOf(key) > -1) {
+                    //5.将 当前元素 创建到 li标签，添加到 ul 中
+                    createLi(str);
+                }
+            }
+        }
+
+        //2.创建li标签对象 ---------------------------------------------------------
+        function createLi(str) {
+            //a.创建 li 标签对象
+            let liObj = document.createElement('li');
+            //b.将传入的字符串 设置给 li标签 当内容
+            liObj.innerHTML = str;
+            //c.将li标签 追加到 ul列表中
+            ulNode.appendChild(liObj);
+
+            // 为 标签对象 添加 鼠标移入事件
+            liObj.onmouseover = liUp;
+            // 为 标签对象 添加 鼠标移出事件
+            liObj.onmouseout = liOut;
+            // 为 标签对象 添加 鼠标点击事件
+            liObj.onclick = liClick;
+        }
+
+        // 3.事件处理函数，单独 作为 具名函数创建，方便事件属性共享使用--------------------
+        function liUp() { // 鼠标 移入 背景色 变成红色
+            this.style.backgroundColor = 'red';
+        }
+
+        function liOut() { // 鼠标 移开 背景色 变成绿色
+            this.style.backgroundColor = 'rgb(12, 255, 24)';
+        }
+
+        function liClick() {
+            //将 被点击的 li标签内容 设置给 文本框
+            txtNode.value = this.innerText;
+
+            // 清空 ul 中所有 li 标签
+            ulNode.innerHTML = '';
+        }
+    </script>
+</body>
+
+</html>

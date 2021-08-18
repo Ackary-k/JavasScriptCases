@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+
+    <style>
+        select {
+            width: 100px;
+            height: 150px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <select name="" id="left" multiple>
+        <option value="">web工程师</option>
+        <option value="">android工程师</option>
+        <option value="">ios工程师</option>
+        <option value="">php工程师</option>
+        <option value="">nodejs工程师</option>
+        <option value="">脱口秀</option>
+        <option value="">正经足疗爱好者</option>
+    </select>
+
+    <button id="btnAll">&gt;&gt;</button>
+    <button id="btnAll2">&lt;&lt;</button>
+    <button id="btnLeft">&gt;</button>
+    <button id="btnRight">&lt;</button>
+
+    <select name="" id="right" multiple></select>
+
+    <script>
+        let selLeft = document.querySelector('#left');
+        let selRight = document.querySelector('#right');
+
+        let btnAll = document.querySelector('#btnAll');
+        let btnAll2 = document.querySelector('#btnAll2');
+        let btnLeft = document.querySelector('#btnLeft');
+        let btnRight = document.querySelector('#btnRight');
+        //1.功能1：全部 右移 --------------------------------------
+        btnAll.onclick = moveToRight;
+
+        function moveToRight() {
+            //1.正序移动 -- 需要 i--
+            for (let i = 0; i < selLeft.children.length; i++) {
+                selRight.appendChild(selLeft.children[i]);
+                i--;
+            }
+
+            //2.倒序移动-----------------------------
+            // for(let i = selLeft.children.length-1; i >=0;i--){
+            //     selRight.appendChild(selLeft.children[i]);
+            // }
+
+        }
+
+        //2.功能2：全部 左移 ----------------------------------------
+        function moveToLeft() {
+
+        }
+
+        //3.功能3：将左侧 选中的 选项 右移 ---------------------------
+        btnLeft.onclick = moveSeletecdToRight;
+
+        function moveSeletecdToRight() {
+            //3.1 获取左侧 下拉框选中的 有option
+            for (let i = 0; i < selLeft.children.length; i++) {
+                //3.2 判断 左侧 下拉框选项 是否选中了
+                if (selLeft.children[i].selected) {
+                    // 3.3 如果选中了，则 移动 到 右侧下拉框
+                    selRight.appendChild(selLeft.children[i]);
+                    i--;
+                }
+
+            }
+        }
+
+        //4.功能4：将右侧 选中的 选项 左移 ---------------------------
+        function moveSeletecdToLeft() {
+
+        }
+    </script>
+
+</body>
+
+</html>

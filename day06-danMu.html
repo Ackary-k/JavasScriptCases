@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #screen {
+            border: 2px solid #000;
+            width: 600px;
+            height: 500px;
+            margin: 10px auto;
+            background-color: #0094ff;
+            color: #fff;
+        }
+
+        #inputdiv {
+            border: 0px solid #000;
+            width: 600px;
+            text-align: center;
+            margin: 10px auto;
+        }
+
+        .dm {
+            position: absolute;
+        }
+    </style>
+    <script>
+        let divList = [];
+        let screeLeft = null;
+
+        window.onload = function () {
+            screeLeft = document.querySelector('#screen').offsetLeft;
+            document.querySelector('#btnAdd').onclick = add;
+        }
+
+        function add() {
+            let strTitle = document.querySelector('#txtContent').value.trim();
+            if (strTitle.length == 0) {
+                alert('内容不能空哦~~');
+                return;
+            }
+
+            //1.创建 评论div
+            let ranTop = Math.ceil(Math.random() * 450) + 5;
+            let dmDiv = document.createElement('div');
+            dmDiv.className = 'dm';
+            dmDiv.innerText = strTitle;
+            dmDiv.style.top = `${ranTop}px`;
+            dmDiv.style.left = `${screeLeft+560}px`;
+
+            document.querySelector('#screen').appendChild(dmDiv);
+
+            //2.将dom对象加入数组
+            divList.push(dmDiv);
+
+        }
+
+        // 动画
+        setInterval(() => {
+            // 遍历数组中的 div,不断修改 left值
+            for (let i = 0; i < divList.length; i++) {
+                let divObj = divList[i];
+                let x = divObj.offsetLeft - 5;
+                let trueWidth = divObj.offsetWidth;
+                // 到左边框了
+                if (x + trueWidth + 20 <= screeLeft) {
+                    //从数组中删除
+                    divList.splice(i, 1);
+                    //从dom中删除
+                    divObj.parentNode.removeChild(divObj);
+                } else {
+                    // 如果没到做边框，则设置左移位置
+                    divObj.style.left = x + 'px';
+                }
+            }
+        }, 30);
+    </script>
+
+
+</head>
+
+<body>
+    <div id='screen'>
+
+    </div>
+
+    <div id="inputdiv">
+        <input type="text" id="txtContent">
+        <input type="button" id='btnAdd' value="发送">
+    </div>
+</body>
+
+</html>

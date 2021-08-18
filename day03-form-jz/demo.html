@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <!-- 导入表单校验组件 -->
+  <script src="./js/jzvalid15.js"></script>
+  <script>
+
+    // 页面加载后 执行
+    window.addEventListener('load', function () {
+      // 创建校验组件实例，自动 为 需要的表单 启用表单校验
+      let jzV = new JZValid15()
+
+      // // 添加自定义规则（ 规则名, 校验的回调函数 ， 校验失败的提示信息）
+      // jzV.addUserRule('confirmPWD', function (val) {
+      //   return document.querySelector('#iptPWD').value.trim() === val
+      // }, '两次密码不一致哦~~~')
+    })
+  </script>
+</head>
+
+<body>
+  <form jzvalid="true">
+    昵称：<input type="text" jz-verify="nickName"><br>
+    密码：<input id="iptPWD" type="text" jz-verify="pwd"><br>
+    确认密码：<input type="text" jz-verify="confirmPWD"><br>
+    <button>注册新用户</button>
+  </form>
+</body>
+
+</html>

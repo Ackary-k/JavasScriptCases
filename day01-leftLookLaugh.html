@@ -1,0 +1,72 @@
+<html>
+
+<head>
+    <title></title>
+    <meta charset='UTF-8' />
+    <style>
+        body {
+            text-align: center;
+            margin: 100px auto;
+        }
+
+        img {
+            cursor: pointer;
+            width: 250px;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="./images/normal.jpg" />
+    <img src="./images/normal.jpg" />
+    <img src="./images/normal.jpg" />
+    <img src="./images/normal.jpg" />
+    <img src="./images/normal.jpg" />
+    <img src="./images/normal.jpg" />
+</body>
+
+<script>
+    //目标：1.鼠标移入 左看，鼠标离开 正常
+    //     2.点击 大笑，其他的都 正常
+    //思路：1.为 每个图片 都 添加 鼠标移入 移出 和 点击事件
+    //     2.鼠标移入，则 将图片改成 左看
+    //           移出，则          正常
+
+    //a.查询所有图片
+    let imgList = document.querySelectorAll('img');
+
+    //b.为 每个图片 添加 3个事件
+    for (let i = 0; i < imgList.length; i++) {
+        let imgObj = imgList[i];
+
+        // 鼠标移入
+        imgObj.onmouseover = function () {
+            // 判断 当前 图片 是否为 群姐，如果不是，则 设置为 left.jpg，如果是，则不改
+            if (this.src.indexOf('01qunjie.jpg') == -1) {
+                this.src = './images/left.jpg';
+            }
+        }
+
+        // 鼠标移出
+        imgObj.onmouseout = function () {
+            // 判断 当前 图片 是否为 群姐照片，如果是，则 不 修改图片
+            //                                不是，则改回城 normal.jpg
+            if (this.src.indexOf('01qunjie.jpg') == -1) {
+                this.src = './images/normal.jpg';
+            }
+        }
+
+        // 鼠标点击
+        imgObj.onclick = function () {
+            //a.将所有 图片 都 改成 normal.jpg
+            for (let i = 0; i < imgList.length; i++) {
+                imgList[i].src = './images/normal.jpg';
+            }
+            
+            //b.将被点击图片 改成 群姐照片
+            this.src = './images/01qunjie.jpg'
+        }
+    }
+</script>
+
+</html>

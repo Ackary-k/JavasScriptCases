@@ -1,0 +1,387 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>捐赠管理</title>
+    <style type="text/css">
+        * {
+            font-family: 微软雅黑;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        div {
+            width: 940px;
+            padding: 5px;
+            margin: 2px auto;
+            border: 1px solid #0094ff;
+        }
+
+        #tbData {
+            border: 1px solid #0094ff;
+            border-collapse: collapse;
+            width: 950px;
+            margin: 2px auto;
+        }
+
+        #tbData th {
+            color: #fff;
+            background-color: #0094ff;
+        }
+
+        #tbData th,
+        td {
+            border: 1px solid #000;
+            padding: 5px;
+            text-align: center;
+        }
+    </style>
+
+    <script type="text/javascript">
+        // 一、类 ---------------------------------------------------------
+        // 1.单位列表类（继承 数组）
+        class OrgList extends Array {
+            // id种子变量
+            static idSeed = 1
+
+            // 参数：idSeed-id种子
+            constructor(idSeed = 1) {
+                super()
+                OrgList.idSeed = idSeed
+                this.init()
+            }
+
+            init() {
+                this.addOrg('壹基金')
+                this.addOrg('慈济基金')
+                this.addOrg('宋庆龄基金')
+            }
+
+            // 新增机构
+            addOrg(orgName) {
+                // 新增对象 到数组
+                this.push({ id: OrgList.idSeed, name: orgName })
+                // 更新id种子
+                OrgList.idSeed++
+            }
+
+            // 根据id查找机构对象
+            findOrgById(id) {
+                let res = this.find(e => e.id === id)
+                return res
+            }
+        }
+
+        // 2.捐款类
+        class Donation {
+            // id,捐款人,机构id,金额,日期
+            constructor(id, username, orgId, money, date) {
+                this.id = id
+                this.username = username
+                this.orgId = orgId
+                this.money = money
+                this.date = date
+            }
+        }
+
+        // 3.捐款数据类
+        class DonationList extends Array {
+            // id种子变量
+            static idSeed = 1
+
+            // 参数：pageIndex,pageSize,idSeed-id种子
+            constructor(pageIndex = 1, pageSize = 5, idSeed = 1) {
+                // 调用父类构造函数
+                super()
+                // 设置默认种子起始值
+                DonationList.idSeed = idSeed
+                // 初始化数据
+                this.init()
+                // 分页相关属性-------------------
+                // 页容量
+                this.pageSize = pageSize
+                // 页码
+                this.pageIndex = pageIndex
+                // 所属机构id（捐给哪家机构）
+                this.orgSearchId = 0
+                // 总行数
+                this.total = this.length
+                // 总页数
+                this.pageCount = 0
+                // 计算总页数
+                this.countPage(this.total)
+            }
+
+            // 计算总页数
+            countPage(total) {
+                // 总页数
+                this.pageCount = Math.ceil(total / this.pageSize)
+            }
+
+            // 初始化数据
+            init() {
+                this.addDonation("李连杰", 1, 10000)
+                this.addDonation("成龙", 2, 20000)
+                this.addDonation("徐静蕾", 2, 2220000);
+                this.addDonation("陈光标", 2, 1000);
+                this.addDonation("星爷", 1, 10000);
+                this.addDonation("梁朝伟", 2, 20000);
+                this.addDonation("周润发", 1, 10000);
+                this.addDonation("马云", 3, 2000000);
+                this.addDonation("甄子丹", 1, 10000);
+                this.addDonation("洪金宝", 3, 2000000);
+                this.addDonation("刘德华", 3, 500000);
+                this.addDonation("易烊千玺", 3, 2000000);
+                this.addDonation("机器猫", 3, 2000000);
+                this.addDonation("阿童木", 3, 2000000);
+                this.addDonation("黑猫警长", 3, 2000000);
+                this.addDonation("黑马程序员", 3, 2000000);
+            }
+
+            // 获取指定页 的数据
+            getPagedList(pageIndex) {
+                pageIndex = pageIndex || this.pageIndex
+                // 如果 有搜索条件（机构id），则先查询 捐给该机构的捐款列表 ---------
+                let searchList = []
+                if (this.orgSearchId !== 0) {
+                    // searchList = this.filter(e => e.orgId == this.orgSearchId)
+                    for (let e of this) {
+                        if (e.orgId === this.orgSearchId) {
+                            searchList.push(e)
+                        }
+                    }
+                    // 记录总行数
+                    this.total = searchList.length
+                } else this.total = this.length
+
+                // 获取 新页 首行下标
+                let beginI = (pageIndex - 1) * this.pageSize
+                // 获取 新页 末行下标
+                let endI = pageIndex * this.pageSize - 1;
+                // 检查是否 超出最后一个元素下标，如果是，则把数组最后一个下标给它
+                if (searchList.length > 0)
+                    endI = endI > searchList.length - 1 ? searchList.length - 1 : endI
+                else
+                    endI = endI > this.length - 1 ? this.length - 1 : endI
+
+                // 获取当前页数据：将 首行 到 末行 的 元素取出，装入新数组
+                let pagedList = []
+                for (let i = beginI; i <= endI; i++) {
+                    // 如果没有搜索条件，则直接从 所有捐款中 获取 分页数据
+                    if (searchList.length === 0) {
+                        pagedList.push(this[i])
+                    } else {
+                        // 如果有搜索条件，则从 符合条件 的 列表中 获取分页数据
+                        pagedList.push(searchList[i])
+                    }
+                }
+                // 返回当前页数据
+                return pagedList
+            }
+
+            // 获取下一页 的数据
+            getNextPage() {
+                // 检查是否为最后一页
+                if (this.pageIndex === this.pageCount) {
+                    return alert('已经最后一页了哦~~ : )')
+                }
+                // 页码+1
+                this.pageIndex++
+                return this.getPagedList(this.pageIndex)
+            }
+
+            // 获取上一页 的数据
+            getPrevPage() {
+                // 检查是否为最后一页
+                if (this.pageIndex === 1) {
+                    return alert('已经第一页了哦~~ : )')
+                }
+                // 页码+1
+                this.pageIndex--
+                return this.getPagedList(this.pageIndex)
+            }
+
+            // 新增捐款
+            addDonation(username, orgId, money, date = new Date()) {
+                // 创建捐款对象
+                let donation = new Donation(DonationList.idSeed, username, orgId, money, date)
+                // 新增对象 到数组
+                this.push(donation)
+                // 更新id种子
+                DonationList.idSeed++
+                // 计算总页数
+                this.countPage()
+            }
+
+            // 删除捐款
+            deleteById(id) {
+                // 查找 id相同捐款的 下标
+                let index = this.findIndex(e => e.id === id)
+                // 如果下标 不为-1，则 根据下标 删除 列表中 的捐款
+                index !== -1 && this.splice(index, 1)
+                // 计算总页数
+                this.countPage()
+            }
+
+            // 根据id查找捐款
+            findById(id) {
+                let res = this.find(e => e.id === id)
+                return res
+            }
+
+            // 获取捐给某家机构的所有 捐款
+            getListByOrgId(id) {
+                return this.filter(e => e.orgId === id)
+            }
+        }
+
+        // 4.为 Date 扩展一个 所有对象 共享的 日期格式化方法
+        // eg: new Date().dateFormat('"YYYY-mm-dd HH:MM"')
+        Date.prototype.dateFormat = function (fmt) {
+            let ret;
+            const opt = {
+                "Y+": this.getFullYear().toString(),        // 年
+                "m+": (this.getMonth() + 1).toString(),     // 月
+                "d+": this.getDate().toString(),            // 日
+                "H+": this.getHours().toString(),           // 时
+                "M+": this.getMinutes().toString(),         // 分
+                "S+": this.getSeconds().toString()          // 秒
+                // 有其他格式化字符需求可以继续添加，必须转化成字符串
+            };
+            for (let k in opt) {
+                ret = new RegExp("(" + k + ")").exec(fmt);
+                if (ret) {
+                    fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+                };
+            };
+            return fmt;
+        }
+
+
+        window.addEventListener('load', function () {
+            // 二、业务和dom 代码 -------------------------------------------
+            // 0.1 创建 机构列表 和 捐款记录列表 实例对象
+            let orgList = new OrgList()
+            let donationList = new DonationList()
+
+            // 0.2 获取 dom元素对象
+            let tbodyDom = document.querySelector('#tbody')
+            let btnNextDom = document.querySelector('#btnNext')
+            let btnPreDom = document.querySelector('#btnPre')
+            // 查询按钮
+            let btnSearchDom = document.querySelector('#btnSearch')
+            // 显示 页码，总页数，总行数
+            let spanPageCount = document.querySelector('#spanPageCount')
+            // 下拉框
+            let selOrgDom = document.querySelector('#selOrg')
+
+            // 2.加载 机构下拉框 --------------------------------
+            makeSelect()
+            function makeSelect() {
+                let arrOptStr = []
+                // a.遍历 机构数组
+                for (let org of orgList) {
+                    arrOptStr.push(`<option value="${org.id}">${org.name}</option>`)
+                }
+                // b.设置给下拉框
+                selOrgDom.innerHTML = arrOptStr.join('\r\n')
+            }
+
+            // 3.显示首页数据到列表 ------------------------------
+            let firstPageList = donationList.getPagedList(1)
+            makeTrs(firstPageList)
+            // 根据 数据 生成表格行 ------------------------------
+            function makeTrs(data) {
+                // 行标签字符串数组
+                let arrTrStr = []
+                // 循环生成表格行标签字符串，存入数组
+                for (let rowData of data) {
+                    let strTr = `<tr>
+                                <td>${rowData.id}</td>
+                                <td>${rowData.username}</td>
+                                <td>${orgList.findOrgById(rowData.orgId).name}</td>
+                                <td>${rowData.money}</td>
+                                <td>${rowData.date.dateFormat("YYYY-mm-dd")}</td>
+                                <td>
+                                    <a href="javascript:;">删</a>
+                                    <a href="javascript:;">改</a>
+                                </td>
+                            </tr>`
+                    arrTrStr.push(strTr)
+                }
+                // 一次性将数组中的 行标签 设置给 tbody
+                tbodyDom.innerHTML = arrTrStr.join('\r\n')
+                // 显示总行数
+                showCount()
+            }
+
+            // 4.下一页按钮 点击-----------------------------------
+            btnNextDom.addEventListener('click', function () {
+                let pageList = donationList.getNextPage()
+                pageList && makeTrs(pageList)
+            })
+
+            // 5.上一页按钮 点击-----------------------------------
+            btnPreDom.addEventListener('click', function () {
+                let pageList = donationList.getPrevPage()
+                pageList && makeTrs(pageList)
+            })
+
+            // 6.显示 行数记录
+            function showCount() {
+                spanPageCount.innerHTML = `${donationList.pageIndex}/${donationList.pageCount} 共 ${donationList.total} 行`
+            }
+
+            // 7.搜索按钮点击 -------------------------------------
+            btnSearchDom.addEventListener('click', function () {
+                // 将 下拉框 选中的 机构id 设置给 捐款列表的查询属性
+                donationList.orgSearchId = parseInt(selOrgDom.value)
+                // 重新获取当前页数据
+                let pageList = donationList.getPagedList()
+                makeTrs(pageList)
+                // 统计页数
+                showCount()
+            })
+        })
+    </script>
+
+</head>
+
+<body>
+    <h1>捐赠管理</h1>
+    <div>
+        受捐企业：
+        <select id="selOrg">
+            <option value="-1">请选择</option>
+        </select>
+        <input type="button" id="btnSearch" value="查询" />
+        <input type="button" id="btnPre" value="上一页" />
+        <input type="button" id="btnNext" value="下一页" />
+        <span id="spanPageCount"></span>
+    </div>
+    <div>
+        捐赠人：<input type="text" id="txtName" />
+        受捐企业：<select id="selAddOrg"></select>
+        金额：<input type="text" id="txtMoney" />
+        受捐日期：<input type="text" id="txtDate" />
+        <input type="button" id="btnAdd" value="新增" />
+    </div>
+    <table id="tbData">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>捐赠人</th>
+                <th>受捐企业</th>
+                <th>金额</th>
+                <th>受捐日期</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+    </table>
+</body>
+
+</html>

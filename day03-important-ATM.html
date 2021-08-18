@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            border: 1px solid #000;
+            margin: 10px;
+            position: absolute;
+            width: 200px;
+            height: 100px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -90%);
+            text-align: center;
+        }
+
+        #box div {
+            margin: 5px;
+        }
+    </style>
+    <script>
+        //目标：完成 ATM功能
+        //     1.能存钱
+        //     2.能取钱
+        //         判断  取钱金额 是否 超出 账户余额，如果超出，需要提示
+        //     3.能显示余额
+        //     4.退出 ATM
+        window.addEventListener('load', function () {
+        })
+    </script>
+</head>
+
+<body>
+    <div id="box">
+        <div>您的余额为：<span>0</span>元</div>
+        <div>
+            <input type="text" id="txtMoney" placeholder="请输入金额">
+        </div>
+        <div>
+            <input type="button" value="存钱">
+            <input type="button" value="取钱">
+        </div>
+    </div>
+</body>
+<!-- author:成都前端_JamesZou 
+     from: https://www.jianshu.com/u/00a012fcb7e9
+-->
+
+</html>

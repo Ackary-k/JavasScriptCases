@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>我的贪吃蛇</title>
+  <style>
+    .map {
+      width: 800px;
+      height: 600px;
+      background-color: #ccc;
+      border: 1px solid #000;
+      /*父相*/
+      position: relative;
+      top: 0px;
+      left: 0px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 地图容器 -->
+  <div id="map" class="map"></div>
+
+  <script src="Food.js"></script>
+  <script src="Snake.js"></script>
+  <script src="Game.js"></script>
+  <script>
+
+    //获取地图对象
+    var map = document.getElementById("map");
+
+    //  //实例化一个食物对象.
+    //  var food1 = new Food();
+    //  //调用食物的render方法来显示食物
+    //  food1.render(map);
+    //
+    //  //实例化蛇对象.
+    //  var snake1 = new Snake();
+    //  //调用蛇的render方法来显示蛇对象
+    //  snake1.render(map);
+
+
+    //实例化一个游戏控制器对象.
+    var g = new Game(map);
+    //调用游戏控制器的start方法让游戏开始.
+    g.start();
+
+  </script>
+</body>
+
+</html>

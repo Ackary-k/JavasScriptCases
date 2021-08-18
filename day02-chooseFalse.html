@@ -1,0 +1,66 @@
+<html>
+
+<head>
+    <title></title>
+    <meta charset='UTF-8' />
+    <style>
+        div {
+            text-align: center;
+        }
+
+        input {
+            border: 2px solid #0094ff;
+            background-color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <input class='chkInput' type="checkbox">
+        <input class='chkInput' type="checkbox">
+        <input class='chkInput' type="checkbox">
+        <input class='chkInput' type="checkbox"> <!-- checked='false' false -->
+        <input class='chkInput' type="checkbox">
+        <br />
+
+        <input id="checkAll" type="button" value="全选">
+        <input id="unCheckAll" type="button" value="全不选">
+        <input id="reverseCheck" type="button" value="反选">
+    </div>
+</body>
+
+<script>
+    //1.获取所有的 复选框
+    let chkList = document.querySelectorAll('[class=chkInput]');
+    console.log(chkList);
+
+    //2.全选按钮 点击事件
+    document.querySelector('#checkAll').onclick = function () {
+        //遍历复选框，设置为 选中状态
+        for (let i = 0; i < chkList.length; i++) {
+            chkList[i].checked = true;
+        }
+    }
+    
+    //3.全不选按钮 点击事件
+    document.querySelector('#unCheckAll').onclick = function () {
+        //遍历复选框，设置为 未选中状态
+        for (let i = 0; i < chkList.length; i++) {
+            chkList[i].checked = false;
+        }
+    }
+
+    // 复选框 的 checked 属性 ：选中返回true，没选中返回false
+
+    //4.反选按钮 点击事件
+    document.querySelector('#reverseCheck').onclick = function () {
+        //遍历复选框，设置为 相反的 选中状态
+        for (let i = 0; i < chkList.length; i++) {
+            // 设置 选中状态 为   取反后的状态
+            chkList[i].checked = !chkList[i].checked; 
+        }
+    }
+</script>
+
+</html>

@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>ToDoList—最简单的待办事项列表</title>
+    <link rel="stylesheet" href="css/index.css">
+    <script src="js/localdata.js"></script>
+</head>
+
+<body>
+    <header>
+        <section>
+            <label for="title">ToDoList</label>
+            <input type="text" id="title" name="title" placeholder="添加ToDo" required="required" autocomplete="off" />
+        </section>
+    </header>
+    <section>
+        <h2>今日事项 <span id="todocount">0</span></h2>
+        <ol id="todolist" class="demo-box">
+
+        </ol>
+    </section>
+    <footer>
+        Copyright &copy; 黑马们~~
+    </footer>
+
+    <script>
+        //1.获取 三个 要操作的 元素 -----------------------------------------
+        var txtTitle = document.querySelector('#title');
+        var todoOL = document.querySelector('#todolist');
+        var spanCount = document.querySelector('#todocount');
+
+        //2.为 文本框 添加 键盘事件 ------------------------------------------
+        txtTitle.onkeypress = function (e) {
+            //a.如果 keyCode == 13 ，说明 按的 是 回车键
+            if (e.keyCode == 13) {
+                //b.获取 文本框内容
+                var usrTxt = txtTitle.value.trim();
+                if (usrTxt.length == 0) {
+                    alert('不能为空~~~');
+                } else {
+                    //c.创建 li 标签
+                    var newLi = document.createElement('li');
+                    // 设置 li 标签的内容
+                    newLi.innerHTML = `<p>${usrTxt}</p> <a href="javascript:;" onclick="del(this)"></a>`;
+                    //d.追加到 ol 标签里
+                    todoOL.appendChild(newLi);
+                    //e.显示数量
+                    count();
+                }
+            }
+        }
+
+        // 根据 ol中 li的数量 更新 span内容
+        function count() {
+            spanCount.innerHTML = todoOL.children.length;
+        }
+
+        // 删除函数
+        function del(delBtn) {
+            //a.删除 按钮 所在的 li 标签
+            todoOL.removeChild(delBtn.parentNode);
+            // ol                a      li
+            //b.显示数量
+            count();
+        }
+    </script>
+
+</body>
+
+</html>
